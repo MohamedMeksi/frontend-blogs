@@ -50,15 +50,14 @@ export default function App() {
             <span>+91 123456789</span>
           </a>
         </div>
-     
+        
       </nav>
 
       <header id="head" ref={headerRef}>
         <a href="#">
           <span>
-            <img src="https://www.ecerasystem.com/ecerasystem/images/eslogo.png" alt="Logo" />
           </span>
-          <span id="c_name"></span>
+          <span id="c_name">About Us</span>
         </a>
         <ul>
           <li><a href="#">Home</a></li>
@@ -80,7 +79,7 @@ export default function App() {
 
       <main>
         <section className="hero">
-          <h1>Welcome to Ecera System</h1>
+          <h1>About us</h1>
           <img src="https://cdni.iconscout.com/illustration/premium/thumb/about-us-1805547-1537820.png" alt="Hero" />
           <p>
             Our goal is to remove any technical or financial barriers that can prevent you from making your own website...
