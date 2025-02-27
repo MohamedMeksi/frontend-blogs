@@ -1,48 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import Card from "../Components/Card";
 import Header from "../Components/Header";
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
 
-const blogs = [
-  {
-    title: "Casablanca",
-    description: "Casablanca est la plus grande ville du Maroc, connue pour son architecture moderne et ses plages.",
-    country: "Maroc",
-    image: "https://www.guidesulysse.com/imageswebp/destinations/iStock-484506846.webp",
-    author: "John Doe"
-  },
-  {
-    title: "Marrakech",
-    description: "Marrakech est une ville historique, célèbre pour ses souks, ses jardins et ses monuments.",
-    country: "Maroc",
-    image: "https://www.marrakech-cityguide.com/wp-content/uploads/Marrakech-place-koutoubia-e1609154215571.jpg",
-    author: "Jane Smith"
-  },
-  {
-    title: "Fès",
-    description: "Fès est une ville ancienne avec une médina classée au patrimoine mondial de l'UNESCO.",
-    country: "Maroc",
-    image: "https://i0.wp.com/reporterontheroad.com/wp-content/uploads/Fes_Maroc_Cover-scaled.jpg?fit=2560%2C1707&ssl=1",
-    author: "Ali Ben"
-  },
-  {
-    title: "Rabat",
-    description: "Rabat est la capitale du Maroc, connue pour son histoire, ses monuments et ses plages.",
-    country: "Maroc",
-    image: "https://www.visitmorocco.com/sites/default/files/styles/thumbnail_destination_background_top5/public/thumbnails/image/tour-hassan-rabat-morocco-by-migel.jpg?itok=YP8GLwSi",
-    author: "Maria Lopez"
-  },
-  {
-    title: "Chefchaouen",
-    description: "Chefchaouen est célèbre pour ses bâtiments peints en bleu et son ambiance tranquille.",
-    country: "Maroc",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR703erjGtMCy0_P4nWbTbXY8T5Q5bIKIFCuQ&s",
-    author: "Ahmed Alami"
-  }
-];
+
 
 const Home = () => {
+  const [blogs, setBlogs] = useState([]);
+
+  useEffect(() => {
+    // Appel à l'API pour récupérer les blogs
+    axios.get("http://localhost:5000/blog/get")
+    .then(response => {
+      console.log("Données reçues :", response.data);
+      setBlogs(response.data);
+    })
+    .catch(error => {
+      console.error("Erreur lors du chargement des blogs :", error);
+    });
+  }, []);  
+
   return (
     <StyledContainer>
       <header>
@@ -60,16 +39,21 @@ const Home = () => {
       <p>Chaque jour est une nouvelle aventure à écrire</p>
 
       <div className="blog-grid">
-        {blogs.map((blog, index) => (
+      {Array.isArray(blogs) ? (
+        blogs.map((blog, index) => (
           <Card
             key={index}
             title={blog.title}
-            description={blog.description}
+            description={blog.content}
             author={blog.author}
-            image={blog.image}
+            image={blog.image || "https://support.heberjahiz.com/hc/article_attachments/21013105397138"}
+            date={blog.createdAt}
           />
-        ))}
-      </div>
+        ))
+      ) : (
+        <p>Aucun blog disponible.</p>
+      )}
+    </div>
 
       <Footer />
     </StyledContainer>
