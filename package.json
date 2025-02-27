@@ -1,6 +1,7 @@
 {
   "name": "my-blogging-project",
   "private": true,
+  "homepage": "https://medud.github.io/bloggingDevArt",
   "version": "0.0.0",
   "type": "module",
   "scripts": {

@@ -88,7 +88,7 @@ const Form = () => {
 
             {/* Registration Link */}
             <div className="register-link">
-              <p className='pip'>Don't have an account? <Link to="/register">Register</Link></p>
+              <p className='pip'>Don't have an account? <Link to="/signup">Register</Link></p>
             </div>
           </div>
         </div>

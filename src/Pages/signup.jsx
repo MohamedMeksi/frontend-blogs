@@ -1,51 +1,207 @@
-import React from 'react';
 
-const Form = () => {
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+
+const Register = () => {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState({});
+
+  const handleRegister = (e) => {
+    e.preventDefault();
+    let errorMessages = {};
+
+    if (!username) {
+      errorMessages.username = 'Username is required';
+    }
+
+    if (!email) {
+      errorMessages.email = 'Email is required';
+    }
+
+    if (!password) {
+      errorMessages.password = 'Password is required';
+    }
+
+    if (Object.keys(errorMessages).length > 0) {
+      setErrors(errorMessages);
+    } else {
+      console.log("Registration successful");
+    }
+  };
+
   return (
-    <form>
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
-        <div className="w-full bg-white rounded-lg shadow border md:mt-0 sm:max-w-md xl:p-0">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <p className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
-              Create an account
-            </p><div>
-              <label className="block mb-2 text-sm font-medium text-gray-900">
-                Your username
-              </label>
-              <input placeholder="JohnDoe" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5" id="username" type="text" />
-            </div>
-            <div>
-              <label className="block mb-2 text-sm font-medium text-gray-900">
-                Password
-              </label>
-              <input className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5" placeholder="••••••••" id="password" type="password" />
-            </div>
-            <div>
-              <label className="block mb-2 text-sm font-medium text-gray-900">
-                Confirm password
-              </label>
-              <input className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5" placeholder="••••••••" id="confirmPassword" type="password" />
-            </div>
-            <div className="flex items-start">
-              <div className="flex items-center h-5">
-                <input className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 bg-gray-700 border-gray-600 focus:ring-primary-600 ring-offset-gray-800" type="checkbox" aria-describedby="terms" id="terms" />
+    <StyledWrapper>
+      <div className="form-container">
+        <div className="image-side">
+          <img src="https://png.pngtree.com/png-vector/20230304/ourmid/pngtree-colorful-blog-speech-bubble-vector-png-image_6633021.png" alt="Left side" className="image" />
+        </div>
+        <div className="form-side">
+          <div className="form-content">
+            <h1>Create an Account</h1>
+            <p>Join Us Today!</p>
+            <form onSubmit={handleRegister}>
+              <div className="input-container">
+                <div className="input-field">
+                  <label htmlFor="username">Username</label>
+                  <input
+                    id="username"
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Username"
+                  />
+                  {errors.username && <span className="error">{errors.username}</span>}
+                </div>
+                <div className="input-field">
+                  <label htmlFor="email">Email</label>
+                  <input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email Address"
+                  />
+                  {errors.email && <span className="error">{errors.email}</span>}
+                </div>
+                <div className="input-field">
+                  <label htmlFor="password">Password</label>
+                  <input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"
+                  />
+                  {errors.password && <span className="error">{errors.password}</span>}
+                </div>
               </div>
-              <div className="ml-3 text-sm">
-                <label className="font-light text-gray-500 text-gray-300">
-                  I accept the
-                  <a href="#" className="font-medium text-primary-600 hover:underline text-primary-500">
-                    Terms and Conditions
-                  </a>
-                </label>
+              <div className="submit-container">
+                <button type="submit" className="submit-button">Register</button>
               </div>
+            </form>
+            <div className="login-link">
+              <p>Already have an account? <Link to="/login">Log in</Link></p>
             </div>
-            <button className="w-full bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center focus:ring-blue-800 text-white" type="submit">
-              Create an account
-            </button>
           </div>
         </div>
-      </div></form>
+      </div>
+    </StyledWrapper>
   );
-}
+};
 
-export default Form;
+const StyledWrapper = styled.div`
+  .form-container {
+    display: flex;
+    height: 100vh;
+  }
+
+  .image-side {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .form-side {
+    flex: 1;
+    background-color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .form-content {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #ff6b00;
+  }
+
+  p {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: #ff6b00;
+  }
+
+  .input-field {
+    margin-bottom: 20px;
+  }
+
+  label {
+    font-size: 1rem;
+    color: #555;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    outline: none;
+  }
+
+  input:focus {
+    border-color: rgb(241, 175, 127);
+  }
+
+  .error {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 5px;
+  }
+
+  .submit-container {
+    margin-top: 20px;
+  }
+
+  .submit-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #ff6b00;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .submit-button:hover {
+    background-color: #ff6b00;
+  }
+
+  .login-link {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .login-link a {
+    color: rgb(255, 179, 125);
+    text-decoration: none;
+  }
+
+  .login-link a:hover {
+    color: rgb(255, 106, 0);
+  }
+`;
+
+export default Register;

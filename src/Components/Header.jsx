@@ -75,7 +75,7 @@ function Header() {
       <nav>
         <HomeLink to="/" activeClassName="active">Home</HomeLink>
         <Button to="/login" activeClassName="active">Login</Button>
-        <Button to="/contact" activeClassName="active">Sign Up</Button>
+        <Button to="/signup" activeClassName="active">Sign Up</Button>
       </nav>
     </StyledContainer>
   );
