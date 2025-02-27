@@ -3,6 +3,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
+
 // Type definitions
 enum Category {
   Business = 'Business',
@@ -69,13 +70,9 @@ const CreateBlog: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post<Blog>(
-        `${API_BASE_URL}/blogs/create`,
-        formData
-      );
+      const response = await axios.post<Blog>(`${API_BASE_URL}/blogs/create`, formData);
 
       setBlogs(prevBlogs => [...prevBlogs, response.data]);
-
       setFormData({
         title: '',
         description: '',
@@ -95,16 +92,16 @@ const CreateBlog: React.FC = () => {
       <Header />
       <MainContent>
         <FormCard>
-          <FormTitle>Create New Blog Post</FormTitle>
+          <FormTitle>Create a New Blog</FormTitle>
           <FormDivider />
           <form onSubmit={handleSubmit}>
             <FormGroup>
-              <Label htmlFor="title">Blog Title</Label>
+              <Label htmlFor="title">Title</Label>
               <Input
                 id="title"
                 name="title"
                 type="text"
-                placeholder="Give your blog a catchy title!"
+                placeholder="Give your blog a catchy title"
                 value={formData.title}
                 onChange={handleChange}
                 required
@@ -112,7 +109,7 @@ const CreateBlog: React.FC = () => {
             </FormGroup>
 
             <FormGroup>
-              <Label htmlFor="description">Blog Description</Label>
+              <Label htmlFor="description">Description</Label>
               <TextArea
                 id="description"
                 name="description"
@@ -155,7 +152,7 @@ const CreateBlog: React.FC = () => {
             </FormGroup>
 
             <FormGroup>
-              <Label htmlFor="image">Featured Image URL</Label>
+              <Label htmlFor="image">Image URL</Label>
               <Input
                 id="image"
                 name="image"
@@ -182,7 +179,7 @@ const MainContent = styled.main`
   display: flex;
   justify-content: center;
   padding: 4rem 2rem;
-  background: linear-gradient(45deg, #a1c4fd, #c2e9fb);
+  background-color: #f4f6f9;
   min-height: 100vh;
   align-items: center;
 `;
@@ -191,10 +188,9 @@ const FormCard = styled.div`
   width: 100%;
   max-width: 600px;
   background-color: white;
-  padding: 2.5rem;
-  border-radius: 20px;
-  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
-  transform: scale(1);
+  padding: 3rem;
+  border-radius: 15px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
   transition: transform 0.5s ease-in-out;
 
   &:hover {
@@ -203,12 +199,11 @@ const FormCard = styled.div`
 `;
 
 const FormTitle = styled.h1`
-  font-size: 28px;
+  font-size: 32px;
   text-align: center;
-  color: #4a90e2;
+  color: #2c3e50;
+  font-family: 'Roboto', sans-serif;
   margin-bottom: 1.5rem;
-  font-family: 'Comic Sans MS', sans-serif;
-  text-transform: uppercase;
 `;
 
 const FormDivider = styled.hr`
@@ -222,7 +217,7 @@ const FormGroup = styled.div`
 
 const Label = styled.label`
   font-size: 18px;
-  color: #333;
+  color: #34495e;
   font-weight: bold;
   margin-bottom: 8px;
   display: block;
@@ -230,63 +225,67 @@ const Label = styled.label`
 
 const Input = styled.input`
   width: 100%;
-  padding: 1rem;
-  border-radius: 15px;
-  border: 2px solid #4a90e2;
-  background: #f2f9fc;
+  padding: 1.2rem;
+  border-radius: 10px;
+  border: 2px solidrgb(255, 255, 255);
+  background: #ecf0f1;
   font-size: 16px;
   transition: all 0.3s ease;
+  box-sizing: border-box;  /* Added to fix width issue */
 
   &:focus {
-    border-color: #007aff;
+    border-color:rgb(255, 255, 255);
     background-color: #ffffff;
   }
 `;
 
 const TextArea = styled.textarea`
   width: 100%;
-  padding: 1rem;
-  border-radius: 15px;
-  border: 2px solid #4a90e2;
-  background: #f2f9fc;
+  padding: 1.2rem;
+  border-radius: 10px;
+  border: 2px solidrgb(255, 255, 255);
+  background: #ecf0f1;
   font-size: 16px;
   transition: all 0.3s ease;
   resize: vertical;
+  box-sizing: border-box;  /* Added to fix width issue */
 
   &:focus {
-    border-color: #007aff;
+    border-color:rgb(255, 255, 255);
     background-color: #ffffff;
   }
 `;
 
 const Select = styled.select`
   width: 100%;
-  padding: 1rem;
-  border-radius: 15px;
-  border: 2px solid #4a90e2;
-  background: #f2f9fc;
+  padding: 1.2rem;
+  border-radius: 10px;
+  border: 2px solidrgb(255, 255, 255);
+  background: #ecf0f1;
   font-size: 16px;
   transition: all 0.3s ease;
+  box-sizing: border-box;  /* Added to fix width issue */
 
   &:focus {
-    border-color: #007aff;
+    border-color:rgb(119, 137, 149);
     background-color: #ffffff;
   }
 `;
 
 const SubmitButton = styled.button`
   width: 100%;
-  padding: 1.2rem;
-  background-color: #4a90e2;
+  padding: 1.5rem;
+  background-color:rgb(255, 117, 32);
   color: white;
   border: none;
-  border-radius: 15px;
+  border-radius: 10px;
   font-size: 18px;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-sizing: border-box;  /* Added to fix width issue */
 
   &:hover {
-    background-color: #006bb3;
+    background-color:rgb(243, 140, 62);
   }
 `;
 
