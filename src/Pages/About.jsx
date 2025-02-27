@@ -1,119 +1,106 @@
-// import { useEffect, useRef, useState } from "react";
-// import "../styles/About.css";
+// eslint-disable-next-line no-unused-vars
+import React from "react";
+import styled, { keyframes } from "styled-components";
 
-// export default function App() {
-//   const headerRef = useRef(null);
-//   const arrowRefs = {
-//     arr: useRef(null),
-//     brr: useRef(null),
-//     crr: useRef(null),
-//   };
+const AboutUs = () => {
+  return (
+    <StyledContainer>
+      <ContentWrapper>
+        <SectionHeader>Notre Mission</SectionHeader>
+        <TextBlock>
+          Chez <strong>Blogs City</strong>, nous croyons au pouvoir des mots et des histoires. 
+          Notre mission est de donner une voix à chaque créateur, de connecter les esprits curieux 
+          et d&apos;inspirer une nouvelle génération de penseurs et d’écrivains.
+        </TextBlock>
 
-//   const [hoverState, setHoverState] = useState({});
+        <SectionHeader>Pourquoi Nous?</SectionHeader>
+        <FeaturesGrid>
+          <FeatureCard>
+            <h3>🌍 Une Communauté Globale</h3>
+            <p>Rejoignez une communauté passionnée de blogueurs et de lecteurs à travers le monde.</p>
+          </FeatureCard>
+          <FeatureCard>
+            <h3>🚀 Inspiration Quotidienne</h3>
+            <p>Découvrez du contenu frais et stimulant chaque jour, propulsé par des créateurs talentueux.</p>
+          </FeatureCard>
+          <FeatureCard>
+            <h3>💡 Partage & Apprentissage</h3>
+            <p>Échangez des idées, apprenez et grandissez ensemble dans un environnement collaboratif.</p>
+          </FeatureCard>
+        </FeaturesGrid>
+      </ContentWrapper>
+    </StyledContainer>
+  );
+};
 
-//   useEffect(() => {
-//     const handleScroll = () => {
-//       if (headerRef.current) {
-//         headerRef.current.style.top = "0px";
-//         headerRef.current.style.position = "sticky";
-//       }
-//       document.querySelectorAll(".reveal").forEach((el) => {
-//         const wndHeight = window.innerHeight;
-//         const rTop = el.getBoundingClientRect().top;
-//         const rPoint = 100;
+// Animations
+const fadeIn = keyframes`
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
 
-//         el.classList.toggle("active", rTop < wndHeight - rPoint);
-//       });
-//     };
-//     window.addEventListener("scroll", handleScroll);
-//     return () => window.removeEventListener("scroll", handleScroll);
-//   }, []);
+// Styles
+const StyledContainer = styled.div`
+  background: #f9f9f9;
+  min-height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 1rem;
+`;
 
-//   const handleMouseOver = (id) => {
-//     setHoverState((prev) => ({ ...prev, [id]: true }));
-//   };
+const ContentWrapper = styled.div`
+  background: white;
+  max-width: 1500px;
+  padding: 3rem;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  animation: ${fadeIn} 0.8s ease-out;
+`;
 
-//   const handleMouseLeave = (id) => {
-//     setHoverState((prev) => ({ ...prev, [id]: false }));
-//   };
+const SectionHeader = styled.h2`
+  font-size: 2rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+`;
 
-//   return (
-//     <div className="App">
-//       <nav>
-//         <div className="contact-info">
-//           <a href="mailto:karan.kumar@ecerasystem.com">
-//             <img src="https://cdn.iconscout.com/icon/free/png-64/email-letter-envelope-message-38065.png" alt="Email" />
-//             <span>karan.kumar@ecerasystem.com</span>
-//           </a>
-//           <a href="tel:+91 123456789">
-//             <img src="https://cdn.iconscout.com/icon/premium/png-64-thumb/telephone-41-117249.png" alt="Phone" />
-//             <span>+91 123456789</span>
-//           </a>
-//         </div>
-        
-//       </nav>
+const TextBlock = styled.p`
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  max-width: 1500px;
+  margin: 0 auto 2rem auto;
+  line-height: 1.6;
+`;
 
-//       <header id="head" ref={headerRef}>
-//         <a href="#">
-//           <span>
-//           </span>
-//           <span id="c_name">About Us</span>
-//         </a>
-//         <ul>
-//           <li><a href="#">Home</a></li>
-//           <li>
-//             <a href="#" onMouseOver={() => handleMouseOver('brr')} onMouseLeave={() => handleMouseLeave('brr')}>
-//               Register/Sign In
-//             </a>
-//             <div id="brr" ref={arrowRefs.brr} className={hoverState.brr ? "arrow-active" : "arrow"}></div>
-//           </li>
-//           <li>
-//             <a href="#" onMouseOver={() => handleMouseOver('arr')} onMouseLeave={() => handleMouseLeave('arr')}>
-//               Services
-//             </a>
-//             <div id="arr" ref={arrowRefs.arr} className={hoverState.arr ? "arrow-active" : "arrow"}></div>
-//           </li>
-//           <li><a href="#">Contact Us</a></li>
-//         </ul>
-//       </header>
+const FeaturesGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+`;
 
-//       <main>
-//         <section className="hero">
-//           <h1>About us</h1>
-//           <img src="https://cdni.iconscout.com/illustration/premium/thumb/about-us-1805547-1537820.png" alt="Hero" />
-//           <p>
-//             Our goal is to remove any technical or financial barriers that can prevent you from making your own website...
-//           </p>
-//         </section>
+const FeatureCard = styled.div`
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
 
-//         <section className="services reveal">
-//           <h1>We Offer Innovative Technology Solutions</h1>
-//           <p>We provide a wide range of services to help your business grow online...</p>
-//           <div className="progress-bars">
-//             <div className="progress"><span>UI/UX Design</span><div className="progress-fill" style={{ width: '90%' }}></div></div>
-//             <div className="progress"><span>App Development</span><div className="progress-fill" style={{ width: '85%' }}></div></div>
-//             <div className="progress"><span>Web Development</span><div className="progress-fill" style={{ width: '70%' }}></div></div>
-//           </div>
-//         </section>
-//       </main>
+  h3 {
+    font-size: 1.3rem;
+    color: #ff6b00;
+    margin-bottom: 0.8rem;
+  }
 
-//       <footer>
-//         <ul>
-//           <li><a href="#">About Us</a></li>
-//           <li><a href="#">Careers</a></li>
-//           <li><a href="#">Blogs</a></li>
-//         </ul>
-//         <ul>
-//           <li><a href="#">Training</a></li>
-//           <li><a href="#">FAQs</a></li>
-//         </ul>
-//         <div className="footer-contact">
-//           <h2>Contact Us</h2>
-//           <a href="tel:+91 232345553">+91 232345553</a>
-//         </div>
-//       </footer>
+  p {
+    font-size: 1rem;
+    color: #555;
+  }
 
-//       <p className="copyright">&copy; 2025 Ecera System. All Rights Reserved.</p>
-//     </div>
-//   );
-// }
+  &:hover {
+    transform: translateY(-5px);
+  }
+`;
+
+export default AboutUs;

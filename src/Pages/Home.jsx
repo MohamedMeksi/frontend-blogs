@@ -1,185 +1,236 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import Card from "../Components/Card";
 import Header from "../Components/Header";
-import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
-
-
-
+import Footer from "../Components/Footer";
+import About from "./About";
+import { Typewriter } from 'react-simple-typewriter';
 const Home = () => {
   const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Appel à l'API pour récupérer les blogs
     axios.get("http://localhost:5000/blog/get")
-    .then(response => {
-      console.log("Données reçues :", response.data);
-      setBlogs(response.data);
-    })
-    .catch(error => {
-      console.error("Erreur lors du chargement des blogs :", error);
-    });
+      .then(response => {
+        setBlogs(response.data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error("Erreur lors du chargement des blogs :", error);
+        setLoading(false);
+      });
   }, []);  
 
   return (
     <StyledContainer>
-      <header>
-        <Header />
-      </header>
+      <Header />
 
-      <div className="banner">
-        <div className="content">
-          <h1>Explorez, grandissez, inspirez-vous chaque jour !</h1>
-          <p>Ta réussite, ton voyage, ton histoire.</p>
-        </div>
-      </div>
+      <BannerSection>
+  <BannerOverlay />
+  <BannerContent>
+    <AnimatedTitle>🌟 Découvrez, créez, partagez !</AnimatedTitle>
+    <BannerSubtitle>
+    <h1>
+    <Typewriter
+      words={['Explorez 🚀', 'Grandissez 📖', 'Inspirez-vous ✨']}
+      loop={0} // 0 = infini
+      cursor
+      cursorStyle="|"
+      typeSpeed={80}
+      deleteSpeed={50}
+      delaySpeed={1000}
+    />
+  </h1>
+    </BannerSubtitle>
+    <ActionButton href="#blogs">Commencez votre voyage ✨</ActionButton>
+  </BannerContent>
+</BannerSection>
 
-      <h1>Mon Blog</h1>
-      <p>Chaque jour est une nouvelle aventure à écrire</p>
 
-      <div className="blog-grid">
-      {Array.isArray(blogs) ? (
-        blogs.map((blog, index) => (
-          <Card
-            key={index}
-            title={blog.title}
-            description={blog.content}
-            author={blog.author}
-            image={blog.image || "https://support.heberjahiz.com/hc/article_attachments/21013105397138"}
-            date={blog.createdAt}
-          />
-        ))
-      ) : (
-        <p>Aucun blog disponible.</p>
-      )}
-    </div>
+      <MainContent>
+        <SectionHeader>
+          <h1>Blogs City</h1>
+          <Tagline>Chaque jour est une nouvelle aventure à écrire</Tagline>
+        </SectionHeader>
 
+        {loading ? (
+          <LoadingSpinner />
+        ) : (
+          <BlogGrid>
+            {blogs.length > 0 ? (
+              blogs.map((blog, index) => (
+                <Card
+                  key={blog._id || index}
+                  title={blog.title}
+                  description={blog.content}
+                  author={blog.author}
+                  image={blog.image || "https://source.unsplash.com/random/800x600"}
+                  date={new Date(blog.createdAt).toLocaleDateString('fr-FR')}
+                />
+              ))
+            ) : (
+              <EmptyMessage>Aucun article disponible pour le moment</EmptyMessage>
+            )}
+          </BlogGrid>
+        )}
+      </MainContent>
+<About />
       <Footer />
     </StyledContainer>
   );
 };
 
-const Footer = () => {
-  return (
-    <StyledFooter>
-      <div className="footer-container">
-        <div className="footer-logo">
-          <h2>MonSite</h2>
-          <p>© 2025 Tous droits réservés</p>
-        </div>
-
-        <div className="footer-links">
-          <a href="#">Accueil</a>
-          <a href="#">À propos</a>
-          <a href="#">Services</a>
-          <a href="#">Contact</a>
-        </div>
-
-        <div className="footer-socials">
-          <a href="#"><FaFacebook /></a>
-          <a href="#"><FaTwitter /></a>
-          <a href="#"><FaInstagram /></a>
-          <a href="#"><FaLinkedin /></a>
-        </div>
-      </div>
-    </StyledFooter>
-  );
-};
+// Composants stylisés
+const fadeIn = keyframes`
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
 
 const StyledContainer = styled.div`
-  text-align: center;
-  background-color: white;
-  color: black; /* Correction ici */
+  background: #f9f9f9;
+  min-height: 100vh;
+  position: relative;
+`;
 
-  header {
-    margin-bottom: 10px;
+const BannerSection = styled.section`
+  position: relative;
+  height: 70vh;
+  overflow: hidden;
+  margin-bottom: 4rem;
+`;
+
+
+
+const BannerContent = styled.div`
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  padding: 2rem;
+  color: white;
+  max-width: 1200px;
+  margin: 0 auto;
+`;
+
+const AnimatedTitle = styled.h1`
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  animation: ${fadeIn} 1s ease-out;
+
+  @media (max-width: 768px) {
+    font-size: 2.5rem;
   }
+`;
+
+const BannerSubtitle = styled.p`
+  font-size: 1.5rem;
+  font-weight: 300;
+  margin-bottom: 2rem;
+  animation: ${fadeIn} 1s ease-out 0.2s;
+  animation-fill-mode: backwards;
+`;
+
+const MainContent = styled.main`
+  padding: 0 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+`;
+
+const SectionHeader = styled.div`
+  text-align: center;
+  margin-bottom: 4rem;
 
   h1 {
-    font-size: 2.5rem;
-    color: #ff6b00;
-  }
-
-  .banner {
-    position: relative;
-    height: 800px;
-    width: 100%;
-    overflow: hidden;
-  }
-
-  .banner::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url("https://www.guidesulysse.com/imageswebp/destinations/iStock-484506846.webp");
-    background-size: cover;
-    background-position: center;
-    filter: blur(8px);
-  }
-
-  .content {
-    position: relative;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    text-align: center;
-    padding: 20px;
-    border-radius: 8px;
-    font-weight: bold;
-  }
-
-  .blog-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 60px;
-    justify-content: center;
-    max-width: 1200px;
-    margin: 0 auto;
+    font-size: 2.8rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
   }
 `;
 
-const StyledFooter = styled.footer`
-  background: #111;
-  color: white;
-  padding: 20px 0;
+const Tagline = styled.p`
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  max-width: 600px;
+  margin: 0 auto;
+`;
+
+const BlogGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 3rem;
+  padding: 2rem 0;
+`;
+
+const LoadingSpinner = styled.div`
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #ff6b00;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 2rem auto;
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
+
+const EmptyMessage = styled.p`
   text-align: center;
-  margin-top: 40px;
+  font-size: 1.2rem;
+  color: #95a5a6;
+  padding: 4rem 0;
+`;
 
-  .footer-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: center;
-    max-width: 1100px;
-    margin: auto;
-  }
+const ActionButton = styled.a`
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 0.8rem 1.8rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(135deg, #ff6b00, #ff9000);
+  border-radius: 30px;
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 
-  .footer-logo h2 {
-    font-size: 24px;
-    margin-bottom: 5px;
-  }
-
-  .footer-links a,
-  .footer-socials a {
-    color: white;
-    text-decoration: none;
-    margin: 0 10px;
-    transition: 0.3s;
-  }
-
-  .footer-links a:hover,
-  .footer-socials a:hover {
-    color: #f39c12;
-  }
-
-  .footer-socials a {
-    font-size: 20px;
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(255, 107, 0, 0.3);
   }
 `;
+const BannerOverlay = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3)), 
+                    url("https://mediaim.expedia.com/destination/1/1e5824822e62655d9377ce1bba1fc6c3.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  filter: blur(8px); /* Applique un flou sur l'image de fond */
+  animation: animatedBackground 15s infinite alternate, parallaxEffect 20s linear infinite;
+
+  @keyframes animatedBackground {
+    0% { filter: brightness(1) saturate(1.2); }
+    100% { filter: brightness(1.3) saturate(1.5); }
+  }
+
+  @keyframes parallaxEffect {
+    0% { background-position: center; }
+    50% { background-position: 50% 50%; }
+    100% { background-position: center; }
+  }
+`;
+
+;
+
+
+
+
 
 export default Home;
