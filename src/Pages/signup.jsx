@@ -80,9 +80,7 @@ const Register = () => {
                 </div>
               </div>
               <div className="submit-container">
-                <button type="submit" className="submit-button"><Link to="/login"> 
-                Registe
-                                  </Link>Register</button>
+                <button type="submit" className="submit-button"><Link to="/login">Registe</Link></button>
               </div>
             </form>
             <div className="login-link">
