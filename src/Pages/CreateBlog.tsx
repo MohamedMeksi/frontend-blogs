@@ -15,18 +15,22 @@ interface Blog {
   title: string;
   description: string;
   category: Category;
+  date: string;
   image: string;
+  author: string;
 }
 
 interface BlogFormData {
   title: string;
   description: string;
   category: string;
+  date: string;
   image: string;
+
 }
 
 // Constants
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = 'http://localhost:3000/blog';
 
 const CreateBlog: React.FC = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -34,8 +38,10 @@ const CreateBlog: React.FC = () => {
     title: '',
     description: '',
     category: '',
+    date: new Date().toISOString().slice(0, 10),
     image: ''
   });
+
 
   useEffect(() => {
     fetchBlogs();
@@ -43,7 +49,7 @@ const CreateBlog: React.FC = () => {
 
   const fetchBlogs = async () => {
     try {
-      const response = await axios.get<Blog[]>(`${API_BASE_URL}/blogs`);
+      const response = await axios.get<Blog[]>(`${API_BASE_URL}/get`);
       setBlogs(response.data);
     } catch (error) {
       console.error('Error fetching blogs:', error);
@@ -62,20 +68,21 @@ const CreateBlog: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       const response = await axios.post<Blog>(
-        `${API_BASE_URL}/blogs/create`, 
+        `${API_BASE_URL}/blogs/create`,
         formData
-      );      
-      
+      );
+
       setBlogs(prevBlogs => [...prevBlogs, response.data]);
 
       setFormData({
         title: '',
         description: '',
         category: '',
-        image: ''
+        image: '',
+        date: ''
       });
 
       console.log('Blog created successfully:', response.data);
@@ -89,7 +96,7 @@ const CreateBlog: React.FC = () => {
       <FormCard>
         <CardTitle>Create New Blog Post</CardTitle>
         <CardDivider />
-          
+
         <form onSubmit={handleSubmit}>
           <FormGroup>
             <Label htmlFor="title">Blog Title</Label>
@@ -133,6 +140,18 @@ const CreateBlog: React.FC = () => {
                 </option>
               ))}
             </LightSelect>
+          </FormGroup>
+
+          <FormGroup>
+            <Label htmlFor="date">Publication Date</Label>
+            <LightInput
+              id="date"
+              name="date"
+              type="date"
+              value={formData.date}
+              onChange={handleChange}
+              required
+            />
           </FormGroup>
 
           <FormGroup>
