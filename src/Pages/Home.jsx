@@ -12,7 +12,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/blog/get")
+    axios.get("http://localhost:5001/blog/get-all")
       .then(response => {
         setBlogs(response.data);
         setLoading(false);
@@ -21,32 +21,32 @@ const Home = () => {
         console.error("Erreur lors du chargement des blogs :", error);
         setLoading(false);
       });
-  }, []);  
+  }, []);
 
   return (
     <StyledContainer>
       <Header />
 
       <BannerSection>
-  <BannerOverlay />
-  <BannerContent>
-    <AnimatedTitle>🌟 Découvrez, créez, partagez !</AnimatedTitle>
-    <BannerSubtitle>
-    <h1>
-    <Typewriter
-      words={['Explorez 🚀', 'Grandissez 📖', 'Inspirez-vous ✨']}
-      loop={0} // 0 = infini
-      cursor
-      cursorStyle="|"
-      typeSpeed={80}
-      deleteSpeed={50}
-      delaySpeed={1000}
-    />
-  </h1>
-    </BannerSubtitle>
-    <ActionButton href="/create">Commencez votre voyage ✨</ActionButton>
-  </BannerContent>
-</BannerSection>
+        <BannerOverlay />
+        <BannerContent>
+          <AnimatedTitle>🌟 Découvrez, créez, partagez !</AnimatedTitle>
+          <BannerSubtitle>
+            <h1>
+              <Typewriter
+                words={['Explorez 🚀', 'Grandissez 📖', 'Inspirez-vous ✨']}
+                loop={0} // 0 = infini
+                cursor
+                cursorStyle="|"
+                typeSpeed={80}
+                deleteSpeed={50}
+                delaySpeed={1000}
+              />
+            </h1>
+          </BannerSubtitle>
+          <ActionButton href="/create">Commencez votre voyage ✨</ActionButton>
+        </BannerContent>
+      </BannerSection>
 
 
       <MainContent>
@@ -62,13 +62,13 @@ const Home = () => {
             {blogs.length > 0 ? (
               blogs.map((blog, index) => (
                 <Card
-                  key={blog._id || index}
                   title={blog.title}
-                  description={blog.content}
-                  author={blog.author}
+                  description={blog.description}
+                  author={blog.author?.name || "Unknown"}
                   image={blog.image || "https://source.unsplash.com/random/800x600"}
-                  date={new Date(blog.createdAt).toLocaleDateString('fr-FR')}
+                  date={new Date(blog.date).toLocaleDateString('fr-FR')}
                 />
+
               ))
             ) : (
               <EmptyMessage>Aucun article disponible pour le moment</EmptyMessage>
@@ -76,7 +76,7 @@ const Home = () => {
           </BlogGrid>
         )}
       </MainContent>
-<About />
+      <About />
       <Footer />
     </StyledContainer>
   );

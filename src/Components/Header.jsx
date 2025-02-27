@@ -74,8 +74,9 @@ function Header() {
       <Title>Blogs City</Title>
       <nav>
         <HomeLink to="/" activeClassName="active">Home</HomeLink>
-        <Button to="/login" activeClassName="active">Login</Button>
-        <Button to="/signup" activeClassName="active">Sign Up</Button>
+        <HomeLink to="/create" activeClassName="active">Craete</HomeLink>
+        <Button to="/about" activeClassName="active">Login</Button>
+        <Button to="/contact" activeClassName="active">Sign Up</Button>
       </nav>
     </StyledContainer>
   );

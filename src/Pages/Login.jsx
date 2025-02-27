@@ -1,235 +1,284 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom'; // Si vous utilisez React Router
-import { useNavigate } from 'react-router-dom';
-const Form = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState({}); // Initialiser errors ici
-const navigate = useNavigate();
-  const login = (e) => {
+import Header from '../Components/Header';
+import Footer from '../Components/Footer';
+
+const CreateBlog = () => {
+  const [blogs, setBlogs] = useState([]);
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    category: '',
+    date: new Date().toISOString().slice(0, 10),
+    image: '',
+    author: '67c0363f67b530ee2cecc177'
+  });
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => {}, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let errorMessages = {};
-    
-    // Exemple de validation (ajoutez ici la logique de validation)
-    if (!email) {
-      errorMessages.email = 'Email is required';
+
+    // Validation logic
+    if (!formData.title) {
+      errorMessages.title = 'Title is required';
+    }
+    if (!formData.description) {
+      errorMessages.description = 'Description is required';
+    }
+    if (!formData.category) {
+      errorMessages.category = 'Category is required';
+    }
+    if (!formData.image) {
+      errorMessages.image = 'Image URL is required';
     }
 
-    if (!password) {
-      errorMessages.password = 'Password is required';
-    }
-
-    // Si des erreurs existent, les afficher
+    // If there are errors, display them
     if (Object.keys(errorMessages).length > 0) {
       setErrors(errorMessages);
     } else {
-      // Sinon, faire le login (logique à implémenter)
-      console.log("Login successful");
-      navigate('/')
+      // If no errors, send the form data to the backend
+      try {
+        const response = await axios.post('http://localhost:5001/blog/add', formData);
+        setBlogs((prevBlogs) => [...prevBlogs, response.data]);
+        setFormData({
+          title: '',
+          description: '',
+          category: '',
+          image: '',
+          date: '',
+          author: ''
+        });
+        console.log('Blog created successfully:', response.data);
+      } catch (error) {
+        console.error('Error creating blog:', error);
+      }
     }
   };
 
   return (
-    <StyledWrapper>
-      <div className="form-container">
-        {/* Image Side */}
-        <div className="image-side">
-          <img src="https://img.freepik.com/photos-premium/concept-communication-bulle-discours-blog-parlant-disant_770123-351.jpg?semt=ais_hybrid" alt="Left side" className="image" />
-        </div>
+    <>
+      <Header />
+      <MainContent>
+        <FormCard>
+          <FormTitle>Create a New Blog</FormTitle>
+          <FormDivider />
+          <form onSubmit={handleSubmit}>
+            <FormGroup>
+              <Label htmlFor="title">Title</Label>
+              <Input
+                id="title"
+                name="title"
+                type="text"
+                placeholder="Give your blog a catchy title"
+                value={formData.title}
+                onChange={handleChange}
+                required
+              />
+              {errors.title && <ErrorMessage>{errors.title}</ErrorMessage>}
+            </FormGroup>
 
-        {/* Form Side */}
-        <div className="form-side">
-          <div className="form-content">
-            <h1>Welcome Back!</h1>
-            <p>Let's Achieve More Together</p>
+            <FormGroup>
+              <Label htmlFor="description">Description</Label>
+              <TextArea
+                id="description"
+                name="description"
+                placeholder="What’s your blog about?"
+                rows={4}
+                value={formData.description}
+                onChange={handleChange}
+                required
+              />
+              {errors.description && <ErrorMessage>{errors.description}</ErrorMessage>}
+            </FormGroup>
 
-            <form onSubmit={login}>
-              <div className="input-container">
-                {/* Email Input */}
-                <div className="input-field">
-                  <label htmlFor="email">Email</label>
-                  <input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Email Address"
-                  />
-                  {errors.email && <span className="error">{errors.email}</span>}
-                </div>
+            <FormGroup>
+              <Label htmlFor="category">Category</Label>
+              <Select
+                id="category"
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select a category</option>
+                <option value="BUS">Business</option>
+                <option value="HLT">Health</option>
+                <option value="LFS">Lifestyle</option>
+                <option value="TEC">Tech</option>
+                <option value="TRV">Travel</option>
+                <option value="EDU">Education</option>
+                <option value="FOD">Food</option>
+                <option value="ART">Art</option>
+              </Select>
+              {errors.category && <ErrorMessage>{errors.category}</ErrorMessage>}
+            </FormGroup>
 
-                {/* Password Input */}
-                <div className="input-field">
-                  <label htmlFor="password">Password</label>
-                  <input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password"
-                  />
-                  {errors.password && <span className="error">{errors.password}</span>}
-                </div>
-              </div>
+            <FormGroup>
+              <Label htmlFor="date">Publication Date</Label>
+              <Input
+                id="date"
+                name="date"
+                type="date"
+                value={formData.date}
+                onChange={handleChange}
+                required
+              />
+            </FormGroup>
 
+            <FormGroup>
+              <Label htmlFor="image">Image URL</Label>
+              <Input
+                id="image"
+                name="image"
+                type="text"
+                placeholder="https://example.com/image.jpg"
+                value={formData.image}
+                onChange={handleChange}
+                required
+              />
+              {errors.image && <ErrorMessage>{errors.image}</ErrorMessage>}
+            </FormGroup>
 
-              {/* Submit Button */}
-              <div className="submit-container">
-                <button
-                  type="submit"
-                  className="submit-button"
-                >
-                  <Link to="/"> 
-                  Log in
-                  </Link>
-                </button>
-              </div>
-
-              {errors.general && <span className="error">{errors.general}</span>}
-            </form>
-
-            {/* Registration Link */}
-            <div className="register-link">
-              <p className='pip'>Don't have an account? <Link to="/signup">Register</Link></p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </StyledWrapper>
+            <SubmitButton type="submit">Create Blog</SubmitButton>
+          </form>
+        </FormCard>
+      </MainContent>
+      <Footer />
+    </>
   );
 };
 
-const StyledWrapper = styled.div`
-  .form-container {
-    display: flex;
-    height: 100vh;
-  }
-.forgot{
-t
-}
-  .image-side {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+// Styled Components
+const MainContent = styled.main`
+  display: flex;
+  justify-content: center;
+  padding: 4rem 2rem;
+  background-color: #f4f6f9;
+  min-height: 100vh;
+  align-items: center;
+`;
 
-  .image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+const FormCard = styled.div`
+  width: 100%;
+  max-width: 600px;
+  background-color: white;
+  padding: 3rem;
+  border-radius: 15px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  transition: transform 0.5s ease-in-out;
 
-  .form-side {
-    flex: 1;
-    background-color: white;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-.pip{
-color:black
-}
-  .form-content {
-    width: 100%;
-    max-width: 400px;
-  }
-
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 10px;
-    font-weight: bold;
-    color: #ff6b00;
-  }
-
-  p {
-    font-size: 1.25rem;
-    margin-bottom: 20px;
-    font-weight: 600;
-    color: #ff6b00;
-  }
-
-  .input-container {
-    margin-top: 20px;
-  }
-
-  .input-field {
-    margin-bottom: 20px;
-  }
-
-  label {
-    font-size: 1rem;
-    color: #555;
-    display: block;
-    margin-bottom: 8px;
-  }
-
-  input {
-    width: 100%;
-    padding: 12px;
-    font-size: 1rem;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    outline: none;
-  }
-
-  input:focus {
-    border-color:rgb(241, 175, 127);
-  }
-
-  .error {
-    color: #ef4444;
-    font-size: 0.875rem;
-    margin-top: 5px;
-  }
-
-  .forgot-password {
-    margin-bottom: 10px;
-    color: #ff6b00
-  }
-
-  .submit-container {
-    margin-top: 20px;
-  }
-
-  .submit-button {
-    width: center;
-    padding: 12px;
-    background-color: #ff6b00;
-    color: white;
-    font-weight: bold;
-    font-size: 1rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-  .submit-button:hover {
-    background-color: #ff6b00;
-  }
-
-  .register-link {
-    text-align: center;
-    margin-top: 20px;
-  }
-
-  .register-link a {
-    color:rgb(255, 179, 125);
-    text-decoration: none;
-  }
-
-  .register-link a:hover {
-    color:rgb(255, 106, 0);
-  }
-
-  .forgot-password a,
-  .register-link a {
-    transition: color 0.3s ease;
-     text-decoration: none
-     color :  #ff6b00
+  &:hover {
+    transform: scale(1.02);
   }
 `;
 
-export default Form;
+const FormTitle = styled.h1`
+  font-size: 32px;
+  text-align: center;
+  color: #2c3e50;
+  font-family: 'Roboto', sans-serif;
+  margin-bottom: 1.5rem;
+`;
+
+const FormDivider = styled.hr`
+  margin: 1.5rem 0;
+  border: 1px solid #e0e0e0;
+`;
+
+const FormGroup = styled.div`
+  margin-bottom: 2rem;
+`;
+
+const Label = styled.label`
+  font-size: 18px;
+  color: #34495e;
+  font-weight: bold;
+  margin-bottom: 8px;
+  display: block;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 1.2rem;
+  border-radius: 10px;
+  border: 2px solid #ddd;
+  background: #ecf0f1;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+
+  &:focus {
+    border-color: #3498db;
+    background-color: #ffffff;
+  }
+`;
+
+const TextArea = styled.textarea`
+  width: 100%;
+  padding: 1.2rem;
+  border-radius: 10px;
+  border: 2px solid #ddd;
+  background: #ecf0f1;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  resize: vertical;
+  box-sizing: border-box;
+
+  &:focus {
+    border-color: #3498db;
+    background-color: #ffffff;
+  }
+`;
+
+const Select = styled.select`
+  width: 100%;
+  padding: 1.2rem;
+  border-radius: 10px;
+  border: 2px solid #ddd;
+  background: #ecf0f1;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+
+  &:focus {
+    border-color: #3498db;
+    background-color: #ffffff;
+  }
+`;
+
+const SubmitButton = styled.button`
+  width: 100%;
+  padding: 1.5rem;
+  background-color: #ff7420;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+
+  &:hover {
+    background-color: #f38c3e;
+  }
+`;
+
+const ErrorMessage = styled.p`
+  color: red;
+  font-size: 14px;
+  margin-top: 8px;
+`;
+
+export default CreateBlog;
