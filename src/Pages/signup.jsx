@@ -2,13 +2,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 const Register = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
-
+   const navigate = useNavigate();
   const handleRegister = (e) => {
     e.preventDefault();
     let errorMessages = {};
@@ -29,6 +29,7 @@ const Register = () => {
       setErrors(errorMessages);
     } else {
       console.log("Registration successful");
+      navigate('/login')
     }
   };
 
@@ -79,7 +80,9 @@ const Register = () => {
                 </div>
               </div>
               <div className="submit-container">
-                <button type="submit" className="submit-button">Register</button>
+                <button type="submit" className="submit-button"><Link to="/login"> 
+                Registe
+                                  </Link>Register</button>
               </div>
             </form>
             <div className="login-link">

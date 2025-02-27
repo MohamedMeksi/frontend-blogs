@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom'; // Si vous utilisez React Router
-
+import { useNavigate } from 'react-router-dom';
 const Form = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({}); // Initialiser errors ici
-
+const navigate = useNavigate();
   const login = (e) => {
     e.preventDefault();
     let errorMessages = {};
@@ -26,6 +26,7 @@ const Form = () => {
     } else {
       // Sinon, faire le login (logique à implémenter)
       console.log("Login successful");
+      navigate('/')
     }
   };
 
@@ -79,7 +80,9 @@ const Form = () => {
                   type="submit"
                   className="submit-button"
                 >
+                  <Link to="/"> 
                   Log in
+                  </Link>
                 </button>
               </div>
 
