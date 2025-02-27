@@ -64,7 +64,7 @@ const Home = () => {
                 <Card
                   title={blog.title}
                   description={blog.description}
-                  author={blog.author.name || "Unknown"}
+                  author={blog.author?.name || "Unknown"}
                   image={blog.image || "https://source.unsplash.com/random/800x600"}
                   date={new Date(blog.date).toLocaleDateString('fr-FR')}
                 />

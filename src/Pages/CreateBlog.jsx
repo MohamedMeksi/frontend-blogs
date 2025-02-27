@@ -3,6 +3,8 @@ import axios from 'axios';
 import styled from 'styled-components';
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
+import { useNavigate } from 'react-router-dom';
+
 
 const CreateBlog = () => {
   const [blogs, setBlogs] = useState([]);
@@ -39,6 +41,7 @@ const CreateBlog = () => {
         author: ''
       });
       console.log('Blog created successfully:', response.data);
+      navigate('/');
     } catch (error) {
       console.error('Error creating blog:', error);
     }
