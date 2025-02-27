@@ -1,321 +1,293 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import styled from 'styled-components';
+// import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+// import styled from 'styled-components';
+// import Header from '../Components/Header';
+// import Footer from '../Components/Footer';
+// // Type definitions
+// enum Category {
+//   Business = 'Business',
+//   Health = 'Health',
+//   Lifestyle = 'Lifestyle',
+//   Tech = 'Tech',
+// }
 
-// Type definitions
-enum Category {
-  Business = 'Business',
-  Health = 'Health',
-  Lifestyle = 'Lifestyle',
-  Tech = 'Tech'
-}
+// interface Blog {
+//   id: number;
+//   title: string;
+//   description: string;
+//   category: Category;
+//   date: string;
+//   image: string;
+//   author: string;
+// }
 
-interface Blog {
-  id: number;
-  title: string;
-  description: string;
-  category: Category;
-  date: string;
-  image: string;
-  author: string;
-}
+// interface BlogFormData {
+//   title: string;
+//   description: string;
+//   category: string;
+//   date: string;
+//   image: string;
+// }
 
-interface BlogFormData {
-  title: string;
-  description: string;
-  category: string;
-  date: string;
-  image: string;
+// // Constants
+// const API_BASE_URL = 'http://localhost:3000/blog';
 
-}
+// const CreateBlog: React.FC = () => {
+//   const [blogs, setBlogs] = useState<Blog[]>([]);
+//   const [formData, setFormData] = useState<BlogFormData>({
+//     title: '',
+//     description: '',
+//     category: '',
+//     date: new Date().toISOString().slice(0, 10),
+//     image: '',
+//   });
 
-// Constants
-const API_BASE_URL = 'http://localhost:3000/blog';
+//   useEffect(() => {
+//     fetchBlogs();
+//   }, []);
 
-const CreateBlog: React.FC = () => {
-  const [blogs, setBlogs] = useState<Blog[]>([]);
-  const [formData, setFormData] = useState<BlogFormData>({
-    title: '',
-    description: '',
-    category: '',
-    date: new Date().toISOString().slice(0, 10),
-    image: ''
-  });
+//   const fetchBlogs = async () => {
+//     try {
+//       const response = await axios.get<Blog[]>(`${API_BASE_URL}/get`);
+//       setBlogs(response.data);
+//     } catch (error) {
+//       console.error('Error fetching blogs:', error);
+//     }
+//   };
 
+//   const handleChange = (
+//     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+//   ) => {
+//     const { name, value } = e.target;
+//     setFormData(prevData => ({
+//       ...prevData,
+//       [name]: value,
+//     }));
+//   };
 
-  useEffect(() => {
-    fetchBlogs();
-  }, []);
+//   const handleSubmit = async (e: React.FormEvent) => {
+//     e.preventDefault();
 
-  const fetchBlogs = async () => {
-    try {
-      const response = await axios.get<Blog[]>(`${API_BASE_URL}/get`);
-      setBlogs(response.data);
-    } catch (error) {
-      console.error('Error fetching blogs:', error);
-    }
-  };
+//     try {
+//       const response = await axios.post<Blog>(
+//         `${API_BASE_URL}/blogs/create`,
+//         formData
+//       );
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value
-    }));
-  };
+//       setBlogs(prevBlogs => [...prevBlogs, response.data]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+//       setFormData({
+//         title: '',
+//         description: '',
+//         category: '',
+//         image: '',
+//         date: '',
+//       });
 
-    try {
-      const response = await axios.post<Blog>(
-        `${API_BASE_URL}/blogs/create`,
-        formData
-      );
+//       console.log('Blog created successfully:', response.data);
+//     } catch (error) {
+//       console.error('Error creating blog:', error);
+//     }
+//   };
 
-      setBlogs(prevBlogs => [...prevBlogs, response.data]);
+//   return (
+//     <>
+//       <Header />
+//       <MainContent>
+//         <FormCard>
+//           <FormTitle>Create New Blog Post</FormTitle>
+//           <FormDivider />
+//           <form onSubmit={handleSubmit}>
+//             <FormGroup>
+//               <Label htmlFor="title">Blog Title</Label>
+//               <Input
+//                 id="title"
+//                 name="title"
+//                 type="text"
+//                 placeholder="Give your blog a catchy title!"
+//                 value={formData.title}
+//                 onChange={handleChange}
+//                 required
+//               />
+//             </FormGroup>
 
-      setFormData({
-        title: '',
-        description: '',
-        category: '',
-        image: '',
-        date: ''
-      });
+//             <FormGroup>
+//               <Label htmlFor="description">Blog Description</Label>
+//               <TextArea
+//                 id="description"
+//                 name="description"
+//                 placeholder="What’s your blog about?"
+//                 rows={4}
+//                 value={formData.description}
+//                 onChange={handleChange}
+//                 required
+//               />
+//             </FormGroup>
 
-      console.log('Blog created successfully:', response.data);
-    } catch (error) {
-      console.error('Error creating blog:', error);
-    }
-  };
+//             <FormGroup>
+//               <Label htmlFor="category">Category</Label>
+//               <Select
+//                 id="category"
+//                 name="category"
+//                 value={formData.category}
+//                 onChange={handleChange}
+//                 required
+//               >
+//                 <option value="">Select a category</option>
+//                 {Object.values(Category).map(category => (
+//                   <option key={category} value={category}>
+//                     {category}
+//                   </option>
+//                 ))}
+//               </Select>
+//             </FormGroup>
 
-  return (
-    <CenteredContainer>
-      <FormCard>
-        <CardTitle>Create New Blog Post</CardTitle>
-        <CardDivider />
+//             <FormGroup>
+//               <Label htmlFor="date">Publication Date</Label>
+//               <Input
+//                 id="date"
+//                 name="date"
+//                 type="date"
+//                 value={formData.date}
+//                 onChange={handleChange}
+//                 required
+//               />
+//             </FormGroup>
 
-        <form onSubmit={handleSubmit}>
-          <FormGroup>
-            <Label htmlFor="title">Blog Title</Label>
-            <LightInput
-              id="title"
-              name="title"
-              type="text"
-              placeholder="Enter a captivating title"
-              value={formData.title}
-              onChange={handleChange}
-              required
-            />
-          </FormGroup>
+//             <FormGroup>
+//               <Label htmlFor="image">Featured Image URL</Label>
+//               <Input
+//                 id="image"
+//                 name="image"
+//                 type="text"
+//                 placeholder="https://example.com/image.jpg"
+//                 value={formData.image}
+//                 onChange={handleChange}
+//                 required
+//               />
+//             </FormGroup>
 
-          <FormGroup>
-            <Label htmlFor="description">Blog Description</Label>
-            <LightTextArea
-              id="description"
-              name="description"
-              placeholder="Write your blog content here"
-              rows={4}
-              value={formData.description}
-              onChange={handleChange}
-              required
-            />
-          </FormGroup>
+//             <SubmitButton type="submit">Create Blog</SubmitButton>
+//           </form>
+//         </FormCard>
+//       </MainContent>
+//       <Footer />
+//     </>
+//   );
+// };
 
-          <FormGroup>
-            <Label htmlFor="category">Category</Label>
-            <LightSelect
-              id="category"
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select a category</option>
-              {Object.values(Category).map(category => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </LightSelect>
-          </FormGroup>
+// // Styled Components
 
-          <FormGroup>
-            <Label htmlFor="date">Publication Date</Label>
-            <LightInput
-              id="date"
-              name="date"
-              type="date"
-              value={formData.date}
-              onChange={handleChange}
-              required
-            />
-          </FormGroup>
+// const MainContent = styled.main`
+//   display: flex;
+//   justify-content: center;
+//   padding: 4rem 2rem;
+//   background: linear-gradient(45deg, #a1c4fd, #c2e9fb);
+//   min-height: 100vh;
+//   align-items: center;
+// `;
 
-          <FormGroup>
-            <Label htmlFor="image">Featured Image URL</Label>
-            <LightInput
-              id="image"
-              name="image"
-              type="text"
-              placeholder="https://example.com/image.jpg"
-              value={formData.image}
-              onChange={handleChange}
-              required
-            />
-          </FormGroup>
+// const FormCard = styled.div`
+//   width: 100%;
+//   max-width: 600px;
+//   background-color: white;
+//   padding: 2.5rem;
+//   border-radius: 20px;
+//   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+//   transform: scale(1);
+//   transition: transform 0.5s ease-in-out;
 
-          <BlueButton type="submit">
-            Create Blog
-          </BlueButton>
-        </form>
-      </FormCard>
-    </CenteredContainer>
-  );
-};
+//   &:hover {
+//     transform: scale(1.02);
+//   }
+// `;
 
-// Styled components
-const CenteredContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  width: 100%;
-  background-color: #f9fafb;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: 0;
-  padding: 20px;
-  box-sizing: border-box;
-`;
+// const FormTitle = styled.h1`
+//   font-size: 28px;
+//   text-align: center;
+//   color: #4a90e2;
+//   margin-bottom: 1.5rem;
+//   font-family: 'Comic Sans MS', sans-serif;
+//   text-transform: uppercase;
+// `;
 
-const FormCard = styled.div`
-  width: 100%;
-  max-width: 500px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  padding: 24px;
-  box-sizing: border-box;
-`;
+// const FormDivider = styled.hr`
+//   margin: 1.5rem 0;
+//   border: 1px solid #e0e0e0;
+// `;
 
-const CardTitle = styled.h2`
-  margin: 0 0 16px 0;
-  color: #111827;
-  font-size: 24px;
-  font-weight: 700;
-  text-align: center;
-`;
+// const FormGroup = styled.div`
+//   margin-bottom: 2rem;
+// `;
 
-const CardDivider = styled.div`
-  height: 1px;
-  background-color: #e5e7eb;
-  margin: 16px 0 24px;
-`;
+// const Label = styled.label`
+//   font-size: 18px;
+//   color: #333;
+//   font-weight: bold;
+//   margin-bottom: 8px;
+//   display: block;
+// `;
 
-const FormGroup = styled.div`
-  margin-bottom: 20px;
-`;
+// const Input = styled.input`
+//   width: 100%;
+//   padding: 1rem;
+//   border-radius: 15px;
+//   border: 2px solid #4a90e2;
+//   background: #f2f9fc;
+//   font-size: 16px;
+//   transition: all 0.3s ease;
 
-const Label = styled.label`
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
-  color: #374151;
-  font-size: 14px;
-`;
+//   &:focus {
+//     border-color: #007aff;
+//     background-color: #ffffff;
+//   }
+// `;
 
-const LightInput = styled.input`
-  width: 100%;
-  padding: 12px 16px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  font-size: 14px;
-  background-color: white;
-  color: #111827;
-  box-sizing: border-box;
-  transition: all 0.2s ease;
-  
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
-  }
+// const TextArea = styled.textarea`
+//   width: 100%;
+//   padding: 1rem;
+//   border-radius: 15px;
+//   border: 2px solid #4a90e2;
+//   background: #f2f9fc;
+//   font-size: 16px;
+//   transition: all 0.3s ease;
+//   resize: vertical;
 
-  &::placeholder {
-    color: #6b7280;
-  }
-`;
+//   &:focus {
+//     border-color: #007aff;
+//     background-color: #ffffff;
+//   }
+// `;
 
-const LightTextArea = styled.textarea`
-  width: 100%;
-  padding: 12px 16px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  font-size: 14px;
-  background-color: white;
-  color: #111827;
-  box-sizing: border-box;
-  resize: vertical;
-  min-height: 120px;
-  transition: all 0.2s ease;
-  font-family: inherit;
-  
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
-  }
+// const Select = styled.select`
+//   width: 100%;
+//   padding: 1rem;
+//   border-radius: 15px;
+//   border: 2px solid #4a90e2;
+//   background: #f2f9fc;
+//   font-size: 16px;
+//   transition: all 0.3s ease;
 
-  &::placeholder {
-    color: #6b7280;
-  }
-`;
+//   &:focus {
+//     border-color: #007aff;
+//     background-color: #ffffff;
+//   }
+// `;
 
-const LightSelect = styled.select`
-  width: 100%;
-  padding: 12px 16px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  font-size: 14px;
-  background-color: white;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  appearance: none;
-  padding-right: 40px;
-  color: #111827;
+// const SubmitButton = styled.button`
+//   width: 100%;
+//   padding: 1.2rem;
+//   background-color: #4a90e2;
+//   color: white;
+//   border: none;
+//   border-radius: 15px;
+//   font-size: 18px;
+//   cursor: pointer;
+//   transition: all 0.3s ease;
 
-  &:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
-  }
-`;
+//   &:hover {
+//     background-color: #006bb3;
+//   }
+// `;
 
-const BlueButton = styled.button`
-  width: 100%;
-  background-color: #3b82f6;
-  color: white;
-  font-weight: 600;
-  font-size: 16px;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin-top: 8px;
-  
-  &:hover {
-    background-color: #2563eb;
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
-  }
-`;
-
-export default CreateBlog;
+// export default CreateBlog;

@@ -44,7 +44,7 @@ const Home = () => {
     />
   </h1>
     </BannerSubtitle>
-    <ActionButton href="#blogs">Commencez votre voyage ✨</ActionButton>
+    <ActionButton href="/create">Commencez votre voyage ✨</ActionButton>
   </BannerContent>
 </BannerSection>
 
