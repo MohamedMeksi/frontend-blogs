@@ -1,7 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import React from 'react';  
 import styled, { keyframes } from 'styled-components';
-import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 
 // Animation d'entrée
 const slideUp = keyframes`
@@ -106,84 +105,6 @@ const StyledFooter = styled.footer`
       }
     }
   }
-
-.footer-socials {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  margin-top: 1rem;
-
-  a {
-    width: 45px;
-    height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-
-    &::after {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      clip-path: circle(0 at 50% 50%);
-      transition: clip-path 0.3s ease;
-    }
-
-    svg {
-      color: rgba(255, 255, 255, 0.8);
-      transition: color 0.3s ease, transform 0.3s ease;
-    }
-
-    &:hover {
-      transform: translateY(-3px);
-
-      &::after {
-        clip-path: circle(100% at 50% 50%);
-      }
-
-      svg {
-        color: white;
-        transform: scale(1.1);
-      }
-    }
-
-    /* Couleurs spécifiques pour chaque réseau social */
-    &[aria-label="Facebook"]:hover {
-      background: #1877f2;
-    }
-
-    &[aria-label="Twitter"]:hover {
-      background: #1da1f2;
-    }
-
-    &[aria-label="Instagram"]:hover {
-      background: radial-gradient(
-        circle at 30% 107%,
-        #fdf497 0%,
-        #fdf497 5%,
-        #fd5949 45%,
-        #d6249f 60%,
-        #285aeb 90%
-      );
-    }
-
-    &[aria-label="LinkedIn"]:hover {
-      background: #0a66c2;
-    }
-  }
-
-  @media (max-width: 480px) {
-    a {
-      width: 40px;
-      height: 40px;
-    }
-  }
-}
 `;
 
 const Footer = () => {
@@ -205,11 +126,9 @@ const Footer = () => {
           <a href="/terms">Conditions d&apos;utilisation</a>
         </div>
 
+        {/* Suppression des icônes des réseaux sociaux */}
         <div className="footer-socials">
-          <a href="#" aria-label="Facebook"><FaFacebook /></a>
-          <a href="#" aria-label="Twitter"><FaTwitter /></a>
-          <a href="#" aria-label="Instagram"><FaInstagram /></a>
-          <a href="#" aria-label="LinkedIn"><FaLinkedin /></a>
+          {/* Section vide ou possibilité d'ajouter d'autres éléments si souhaité */}
         </div>
       </div>
     </StyledFooter>
