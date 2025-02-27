@@ -4,83 +4,40 @@ import styled from 'styled-components';
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 
-// Type definitions
-enum Category {
-  Business = 'Business',
-  Health = 'Health',
-  Lifestyle = 'Lifestyle',
-  Tech = 'Tech',
-}
-
-interface Blog {
-  id: number;
-  title: string;
-  description: string;
-  category: Category;
-  date: string;
-  image: string;
-  author: string;
-}
-
-interface BlogFormData {
-  title: string;
-  description: string;
-  category: string;
-  date: string;
-  image: string;
-}
-
-// Constants
-const API_BASE_URL = 'http://localhost:3000/blog';
-
-const CreateBlog: React.FC = () => {
-  const [blogs, setBlogs] = useState<Blog[]>([]);
-  const [formData, setFormData] = useState<BlogFormData>({
+const CreateBlog = () => {
+  const [blogs, setBlogs] = useState([]);
+  const [formData, setFormData] = useState({
     title: '',
     description: '',
     category: '',
     date: new Date().toISOString().slice(0, 10),
     image: '',
+    author: '67c0363f67b530ee2cecc177' // Remplacez par l'ID de l'auteur dynamique
   });
 
-  useEffect(() => {
-    fetchBlogs();
-  }, []);
+  useEffect(() => {}, []);
 
-  const fetchBlogs = async () => {
-    try {
-      const response = await axios.get<Blog[]>(`${API_BASE_URL}/get`);
-      setBlogs(response.data);
-    } catch (error) {
-      console.error('Error fetching blogs:', error);
-    }
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await axios.post<Blog>(`${API_BASE_URL}/blogs/create`, formData);
-
-      setBlogs(prevBlogs => [...prevBlogs, response.data]);
+      const response = await axios.post('http://localhost:5001/blog/add', formData);
+      setBlogs((prevBlogs) => [...prevBlogs, response.data]);
       setFormData({
         title: '',
         description: '',
         category: '',
         image: '',
         date: '',
+        author: ''
       });
-
       console.log('Blog created successfully:', response.data);
     } catch (error) {
       console.error('Error creating blog:', error);
@@ -97,71 +54,37 @@ const CreateBlog: React.FC = () => {
           <form onSubmit={handleSubmit}>
             <FormGroup>
               <Label htmlFor="title">Title</Label>
-              <Input
-                id="title"
-                name="title"
-                type="text"
-                placeholder="Give your blog a catchy title"
-                value={formData.title}
-                onChange={handleChange}
-                required
-              />
+              <Input id="title" name="title" type="text" placeholder="Give your blog a catchy title" value={formData.title} onChange={handleChange} required />
             </FormGroup>
 
             <FormGroup>
               <Label htmlFor="description">Description</Label>
-              <TextArea
-                id="description"
-                name="description"
-                placeholder="What’s your blog about?"
-                rows={4}
-                value={formData.description}
-                onChange={handleChange}
-                required
-              />
+              <TextArea id="description" name="description" placeholder="What’s your blog about?" rows={4} value={formData.description} onChange={handleChange} required />
             </FormGroup>
 
             <FormGroup>
               <Label htmlFor="category">Category</Label>
-              <Select
-                id="category"
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
-                required
-              >
+              <Select id="category" name="category" value={formData.category} onChange={handleChange} required>
                 <option value="">Select a category</option>
-                {Object.values(Category).map(category => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
+                <option value="BUS">Business</option>
+                <option value="HLT">Health</option>
+                <option value="LFS">Lifestyle</option>
+                <option value="TEC">Tech</option>
+                <option value="TRV">Travel</option>
+                <option value="EDU">Education</option>
+                <option value="FOD">Food</option>
+                <option value="ART">Art</option>
               </Select>
             </FormGroup>
 
             <FormGroup>
               <Label htmlFor="date">Publication Date</Label>
-              <Input
-                id="date"
-                name="date"
-                type="date"
-                value={formData.date}
-                onChange={handleChange}
-                required
-              />
+              <Input id="date" name="date" type="date" value={formData.date} onChange={handleChange} required />
             </FormGroup>
 
             <FormGroup>
               <Label htmlFor="image">Image URL</Label>
-              <Input
-                id="image"
-                name="image"
-                type="text"
-                placeholder="https://example.com/image.jpg"
-                value={formData.image}
-                onChange={handleChange}
-                required
-              />
+              <Input id="image" name="image" type="text" placeholder="https://example.com/image.jpg" value={formData.image} onChange={handleChange} required />
             </FormGroup>
 
             <SubmitButton type="submit">Create Blog</SubmitButton>
@@ -174,7 +97,6 @@ const CreateBlog: React.FC = () => {
 };
 
 // Styled Components
-
 const MainContent = styled.main`
   display: flex;
   justify-content: center;
@@ -227,14 +149,14 @@ const Input = styled.input`
   width: 100%;
   padding: 1.2rem;
   border-radius: 10px;
-  border: 2px solidrgb(255, 255, 255);
+  border: 2px solid #ddd;
   background: #ecf0f1;
   font-size: 16px;
   transition: all 0.3s ease;
-  box-sizing: border-box;  /* Added to fix width issue */
+  box-sizing: border-box;
 
   &:focus {
-    border-color:rgb(255, 255, 255);
+    border-color: #3498db;
     background-color: #ffffff;
   }
 `;
@@ -243,15 +165,15 @@ const TextArea = styled.textarea`
   width: 100%;
   padding: 1.2rem;
   border-radius: 10px;
-  border: 2px solidrgb(255, 255, 255);
+  border: 2px solid #ddd;
   background: #ecf0f1;
   font-size: 16px;
   transition: all 0.3s ease;
   resize: vertical;
-  box-sizing: border-box;  /* Added to fix width issue */
+  box-sizing: border-box;
 
   &:focus {
-    border-color:rgb(255, 255, 255);
+    border-color: #3498db;
     background-color: #ffffff;
   }
 `;
@@ -260,14 +182,14 @@ const Select = styled.select`
   width: 100%;
   padding: 1.2rem;
   border-radius: 10px;
-  border: 2px solidrgb(255, 255, 255);
+  border: 2px solid #ddd;
   background: #ecf0f1;
   font-size: 16px;
   transition: all 0.3s ease;
-  box-sizing: border-box;  /* Added to fix width issue */
+  box-sizing: border-box;
 
   &:focus {
-    border-color:rgb(119, 137, 149);
+    border-color: #3498db;
     background-color: #ffffff;
   }
 `;
@@ -275,17 +197,17 @@ const Select = styled.select`
 const SubmitButton = styled.button`
   width: 100%;
   padding: 1.5rem;
-  background-color:rgb(255, 117, 32);
+  background-color: #ff7420;
   color: white;
   border: none;
   border-radius: 10px;
   font-size: 18px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-sizing: border-box;  /* Added to fix width issue */
+  box-sizing: border-box;
 
   &:hover {
-    background-color:rgb(243, 140, 62);
+    background-color: #f38c3e;
   }
 `;
 
