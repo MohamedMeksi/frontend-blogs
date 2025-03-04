@@ -3,8 +3,8 @@ import axios from 'axios';
 import styled from 'styled-components';
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
-import { useNavigate } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
 
 const CreateBlog = () => {
   const [blogs, setBlogs] = useState([]);
@@ -14,10 +14,25 @@ const CreateBlog = () => {
     category: '',
     date: new Date().toISOString().slice(0, 10),
     image: '',
-    author: '67c0363f67b530ee2cecc177' // Remplacez par l'ID de l'auteur dynamique
+    author: { _id: '' }
   });
+  const navigate = useNavigate();
+  
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setFormData((prevData) => ({
+          ...prevData,
+          author: { _id: decoded.id }
+        }));
+      } catch (error) {
+        console.error("Erreur lors du décodage du token:", error);
+      }
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,7 +45,10 @@ const CreateBlog = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5001/blog/add', formData);
+      const response = await axios.post('http://localhost:5001/blog/add', {
+        ...formData,
+        author: { _id: formData.author._id }
+      });
       setBlogs((prevBlogs) => [...prevBlogs, response.data]);
       setFormData({
         title: '',
@@ -38,7 +56,7 @@ const CreateBlog = () => {
         category: '',
         image: '',
         date: '',
-        author: ''
+        author: { _id: formData.author._id }
       });
       console.log('Blog created successfully:', response.data);
       navigate('/');
