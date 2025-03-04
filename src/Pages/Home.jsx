@@ -15,6 +15,7 @@ const Home = () => {
     axios.get("http://localhost:5001/blog/get-all")
       .then(response => {
         setBlogs(response.data);
+        console.log(response.data)
         setLoading(false);
       })
       .catch(error => {
