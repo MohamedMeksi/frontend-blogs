@@ -1,40 +1,52 @@
-
 import React, { useState } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Header from "../Components/Header";
+import Footer from "../Components/Footer";
+
 const Register = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
-   const navigate = useNavigate();
-  const handleRegister = (e) => {
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleRegister = async (e) => {
     e.preventDefault();
     let errorMessages = {};
 
-    if (!username) {
-      errorMessages.username = 'Username is required';
-    }
-
-    if (!email) {
-      errorMessages.email = 'Email is required';
-    }
-
-    if (!password) {
-      errorMessages.password = 'Password is required';
-    }
+    if (!username) errorMessages.username = 'Username is required';
+    if (!email) errorMessages.email = 'Email is required';
+    if (!password) errorMessages.password = 'Password is required';
 
     if (Object.keys(errorMessages).length > 0) {
       setErrors(errorMessages);
-    } else {
-      console.log("Registration successful");
-      navigate('/login')
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axios.post('http://localhost:5001/user/register', {
+        username,
+        email,
+        password,
+      });
+
+      alert(response.data.message);
+      navigate('/login');
+    } catch (error) {
+      console.error('Registration error:', error);
+      setErrors({ api: error.response?.data.message || 'An error occurred' });
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <StyledWrapper>
+      <Header />
       <div className="form-container">
         <div className="image-side">
           <img src="https://png.pngtree.com/png-vector/20230304/ourmid/pngtree-colorful-blog-speech-bubble-vector-png-image_6633021.png" alt="Left side" className="image" />
@@ -78,9 +90,12 @@ const Register = () => {
                   />
                   {errors.password && <span className="error">{errors.password}</span>}
                 </div>
+                {errors.api && <p className="error">{errors.api}</p>}
               </div>
               <div className="submit-container">
-                <button type="submit" className="submit-button"><Link to="/login">Registe</Link></button>
+                <button type="submit" className="submit-button" disabled={loading}>
+                  {loading ? 'Registering...' : 'Register'}
+                </button>
               </div>
             </form>
             <div className="login-link">
@@ -89,6 +104,7 @@ const Register = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </StyledWrapper>
   );
 };
@@ -98,20 +114,17 @@ const StyledWrapper = styled.div`
     display: flex;
     height: 100vh;
   }
-
   .image-side {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-
   .image {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-
   .form-side {
     flex: 1;
     background-color: white;
@@ -120,37 +133,31 @@ const StyledWrapper = styled.div`
     justify-content: center;
     align-items: center;
   }
-
   .form-content {
     width: 100%;
     max-width: 400px;
   }
-
   h1 {
     font-size: 2rem;
     margin-bottom: 10px;
     font-weight: bold;
     color: #ff6b00;
   }
-
   p {
     font-size: 1.25rem;
     margin-bottom: 20px;
     font-weight: 600;
     color: #ff6b00;
   }
-
   .input-field {
     margin-bottom: 20px;
   }
-
   label {
     font-size: 1rem;
     color: #555;
     display: block;
     margin-bottom: 8px;
   }
-
   input {
     width: 100%;
     padding: 12px;
@@ -159,21 +166,17 @@ const StyledWrapper = styled.div`
     border: 1px solid #ccc;
     outline: none;
   }
-
   input:focus {
     border-color: rgb(241, 175, 127);
   }
-
   .error {
     color: #ef4444;
     font-size: 0.875rem;
     margin-top: 5px;
   }
-
   .submit-container {
     margin-top: 20px;
   }
-
   .submit-button {
     width: 100%;
     padding: 12px;
@@ -185,21 +188,17 @@ const StyledWrapper = styled.div`
     border-radius: 5px;
     cursor: pointer;
   }
-
   .submit-button:hover {
     background-color: #ff6b00;
   }
-
   .login-link {
     text-align: center;
     margin-top: 20px;
   }
-
   .login-link a {
     color: rgb(255, 179, 125);
     text-decoration: none;
   }
-
   .login-link a:hover {
     color: rgb(255, 106, 0);
   }
