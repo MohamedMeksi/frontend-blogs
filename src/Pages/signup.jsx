@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
+import Header from "../Components/Header";
+import Footer from "../Components/Footer";
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -44,6 +46,7 @@ const Register = () => {
 
   return (
     <StyledWrapper>
+      <Header />
       <div className="form-container">
         <div className="image-side">
           <img src="https://png.pngtree.com/png-vector/20230304/ourmid/pngtree-colorful-blog-speech-bubble-vector-png-image_6633021.png" alt="Left side" className="image" />
@@ -101,6 +104,7 @@ const Register = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </StyledWrapper>
   );
 };
