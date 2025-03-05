@@ -15,11 +15,11 @@ Ceci est un projet développé avec **React** et **Vite**, utilisant **Axios** p
 ![Le projet](./public/1.png)  
 ![Le projet](./public/2.png)  
 
-(![](./public/3.png)  ) 
-(![](./public/4.png)  ) 
-(![](./public/5.png)  ) 
-(![](./public/6.png)  ) 
-(![](./public/6.png)  ) 
+![](./public/3.png)  
+![](./public/4.png)  
+![](./public/5.png)   
+![](./public/6.png)   
+![](./public/6.png)   
 
 
 ---
