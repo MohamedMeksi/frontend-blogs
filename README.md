@@ -28,7 +28,7 @@ Ceci est un projet développé avec **React** et **Vite**, utilisant **Axios** p
 
 Avant de commencer, assurez-vous d'avoir **Node.js** et **npm** installés sur votre machine.
 
-![Node.js logo](./assets/nodejs-logo.png)  <!-- Image locale -->
+![Node.js logo]([./assets/nodejs-logo.png](https://www.toutjavascript.com/savoir/media/nodejs/nodejs-new-pantone-black.png))  <!-- Image locale -->
 
 - Téléchargez Node.js sur [https://nodejs.org/](https://nodejs.org/).
 
