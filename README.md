@@ -12,14 +12,14 @@ Ceci est un projet développé avec **React** et **Vite**, utilisant **Axios** p
 - **Redux** pour la gestion centralisée de l'état de l'application.
 - **HTML** et **CSS** pour le balisage et le design.
 
-![Le projet](./public/1.png)  
-![Le projet](./public/2.png)  
+![Le projet1](./public/1.png)  
+![Le projet2](./public/2.png)  
 
-![](./public/3.png)  
-![](./public/4.png)  
-![](./public/5.png)   
-![](./public/6.png)   
-![](./public/6.png)   
+![Le projet3 ](./public/3.png)  
+![Le projet4 ](./public/4.png)  
+![Le projet5 ](./public/5.png)   
+![Le projet6 ](./public/6.png)   
+![Le projet7 ](./public/6.png)   
 
 
 ---
